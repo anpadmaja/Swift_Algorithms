@@ -24,6 +24,17 @@ a == b
 let vertexList = [a, b]
 vertexList.contains(c)
 
+enum Directions: String {
+  case east,west,north,south
+  
+  static var list: [Directions] {
+    return [Directions.east, Directions.west, Directions.north, Directions.south]
+  }
+}
+
+let dir = Directions.list.map({$0.rawValue})
+dir
+
 enum LightBulbStates {
   case On, Off
   
@@ -44,3 +55,47 @@ var bulbIsOn = bulbIsOff.toggle()
 var bulbIsOffAgain = bulbIsOn.toggle()
 var bulbIsOnAgain = bulbIsOffAgain.toggle()
 
+
+enum Planets: Int {
+  case Mercury = 1
+  case Venus
+  case Earth
+  case Mars
+  case Jupiter
+  case Saturn
+  case Uranus
+  case Neptune
+  case Pluto
+  
+  mutating func nextPlanet() {
+    switch self {
+    case .Mercury :
+      self = .Venus
+    case .Venus :
+      self = .Earth
+    case .Earth :
+      self = .Mars
+    case .Mars :
+      self = .Jupiter
+    case .Jupiter :
+      self = .Saturn
+    case .Saturn :
+      self = .Uranus
+    case .Uranus :
+      self = .Neptune
+    case .Neptune :
+      self = .Pluto
+    case .Pluto :
+      self = .Mercury
+    }
+  }
+}
+
+var merc = Planets.Mercury
+merc.nextPlanet()
+merc.nextPlanet()
+merc.nextPlanet()
+
+if var jupiter = Planets(rawValue: 5) {
+  jupiter.nextPlanet()
+}
