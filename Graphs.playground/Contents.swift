@@ -2,6 +2,7 @@
 
 let graph = AdjacencyListGraph()
 
+// BFS and DFS graphs
 let a = graph.addVertex(data: "A")
 let b = graph.addVertex(data: "B")
 let c = graph.addVertex(data: "C")
@@ -40,3 +41,29 @@ graph.degreeOfVertex(vertex: i)
 graph.levelOrderTraversal(startVertex: a)
 graph.depthFirstSearch(startIndex: a)
 
+// topological sort graph
+let topoGraph = AdjacencyListGraph()
+
+let c1 = topoGraph.addVertex(data: "CS1")
+let c2 = topoGraph.addVertex(data: "CS2")
+let c3 = topoGraph.addVertex(data: "CS3")
+let c4 = topoGraph.addVertex(data: "CS4")
+let c5 = topoGraph.addVertex(data: "CS5")
+let c6 = topoGraph.addVertex(data: "CS6")
+let c7 = topoGraph.addVertex(data: "CS7")
+let c8 = topoGraph.addVertex(data: "CS8")
+let c9 = topoGraph.addVertex(data: "CS9")
+let c10 = topoGraph.addVertex(data: "CS10")
+
+topoGraph.addEdge(startVertex: c1, endVertex: c2)
+topoGraph.addEdge(startVertex: c2, endVertex: c3)
+topoGraph.addEdge(startVertex: c2, endVertex: c4)
+topoGraph.addEdge(startVertex: c2, endVertex: c5)
+topoGraph.addEdge(startVertex: c4, endVertex: c6)
+topoGraph.addEdge(startVertex: c4, endVertex: c7)
+topoGraph.addEdge(startVertex: c6, endVertex: c8)
+topoGraph.addEdge(startVertex: c7, endVertex: c8)
+topoGraph.addEdge(startVertex: c7, endVertex: c9)
+topoGraph.addEdge(startVertex: c9, endVertex: c10)
+topoGraph.addEdge(startVertex: c5, endVertex: c10)
+topoGraph.topologicalSort()

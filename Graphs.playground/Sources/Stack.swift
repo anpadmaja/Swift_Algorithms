@@ -46,6 +46,10 @@ public class Stack: Equatable {
     return list.count
   }
   
+  public func contains(value: Vertex) -> Bool {
+    return list.contains(value)
+  }
+  
   public func listAll() {
     for i in 0..<list.count {
       print(list[i])

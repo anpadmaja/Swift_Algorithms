@@ -106,7 +106,7 @@ public class AdjacencyListGraph: BaseGraphProperties {
   
   public func getVertex(data: String) -> Vertex {
     let existingVertex = vertices.filter { vertex in
-        return vertex.data == data
+      return vertex.data == data
     }
     return existingVertex.last!
   }
@@ -209,4 +209,33 @@ public class AdjacencyListGraph: BaseGraphProperties {
     }
     return visitedNeighQueue.list
   }
+  
+  public func topologicalSort() -> [Vertex] {
+    var returnList = [Vertex]()
+    let visitedNeighborsStack = Stack()
+    let unvisitedNeighborsStack = Stack()
+    
+    for i in 0..<adjacencyList.count {
+      let currentVertex = adjacencyList[i].vertex
+      if let neighborsList = getNeighbors(startVertex: currentVertex)?.filter({ !visitedNeighborsStack.contains(value: $0) }) {
+        if neighborsList.count == 0 {
+          visitedNeighborsStack.push(value: currentVertex)
+        } else {
+          unvisitedNeighborsStack.push(value: currentVertex)
+        }
+      } else {
+        visitedNeighborsStack.push(value: currentVertex)
+      }
+    }
+    while !unvisitedNeighborsStack.isEmpty {
+      let currentVertex = unvisitedNeighborsStack.pop()
+      visitedNeighborsStack.push(value: currentVertex)
+    }
+    
+    while !visitedNeighborsStack.isEmpty {
+      returnList.append(visitedNeighborsStack.pop())
+    }
+    return returnList
+  }
 }
+
