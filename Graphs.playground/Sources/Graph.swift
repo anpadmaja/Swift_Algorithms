@@ -46,7 +46,8 @@ public class EdgeList {
 }
 
 public protocol BaseGraphProperties {
-  var vertices: [Vertex] {get}
+  associatedtype Item
+  var vertices: [Item] {get}
   var edges: [Edge] {get}
   var numberOfVertices: Int {get}
   var numberOfEdges: Int {get}
@@ -166,6 +167,30 @@ public class AdjacencyListGraph: BaseGraphProperties {
     } else {
       return nil
     }
+  }
+  
+  public func hasCycle(startIndex: Vertex) -> Bool {
+    let unvisitedNeighborsStack = Stack()
+    let visitedNeighborsQueue = Queue()
+
+    unvisitedNeighborsStack.push(value: startIndex)
+    visitedNeighborsQueue.enqueue(value: startIndex)
+    
+    while !unvisitedNeighborsStack.isEmpty {
+      let currentVertex = unvisitedNeighborsStack.peek()
+      if let neighbor1 = getNeighbors(startVertex: currentVertex)?.filter({ !visitedNeighborsQueue.contains(value: $0) }).first {
+        unvisitedNeighborsStack.push(value: neighbor1)
+        visitedNeighborsQueue.enqueue(value: neighbor1)
+      } else {
+        if let _ = getNeighbors(startVertex: currentVertex)?.filter({ unvisitedNeighborsStack.contains(value: $0) }).first {
+          return true
+        } else {
+          print("poping out of the stack")
+          _ = unvisitedNeighborsStack.pop()
+        }
+      }
+    }
+    return false
   }
   
   public func levelOrderTraversal(startVertex: Vertex) -> [Vertex] {

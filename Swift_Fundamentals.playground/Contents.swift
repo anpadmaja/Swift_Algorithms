@@ -2,6 +2,39 @@
 
 import UIKit
 
+func isHappy(_ n: Int) -> Bool {
+  var visitedNumbers = [Int]()
+  var currentInt = n
+  
+  while !isPowerOfTen(n: currentInt) {
+    let currentNumber = String(currentInt)
+    var currentNumberList = currentNumber.map({Int(String($0))})
+    var sum: Int = 0
+    for i in 0..<currentNumberList.count {
+      sum +=  currentNumberList[i]! * currentNumberList[i]!
+    }
+
+    if visitedNumbers.contains(sum) {
+      return false
+    } else {
+      visitedNumbers.append(sum)
+      currentInt = sum
+    }
+  }
+  return true
+}
+
+func isPowerOfTen(n: Int) -> Bool {
+  var input = n
+  while input > 9 && input%10 == 0{
+    input /= 10
+  }
+  return input==1
+}
+
+isHappy(19)
+isPowerOfTen(n: 1)
+
 public struct Vertex: Equatable {
   public var data: String
   public var index: Int

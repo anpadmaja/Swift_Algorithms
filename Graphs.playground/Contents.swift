@@ -40,6 +40,7 @@ graph.degreeOfVertex(vertex: i)
 
 graph.levelOrderTraversal(startVertex: a)
 graph.depthFirstSearch(startIndex: a)
+graph.hasCycle(startIndex: a)
 
 // topological sort graph
 let topoGraph = AdjacencyListGraph()
@@ -67,3 +68,12 @@ topoGraph.addEdge(startVertex: c7, endVertex: c9)
 topoGraph.addEdge(startVertex: c9, endVertex: c10)
 topoGraph.addEdge(startVertex: c5, endVertex: c10)
 topoGraph.topologicalSort()
+
+let simpleGraph = AdjacencyListGraph()
+let cs1 = simpleGraph.addVertex(data: "A")
+let cs2 = simpleGraph.addVertex(data: "B")
+let cs3 = simpleGraph.addVertex(data: "C")
+simpleGraph.addEdge(startVertex: cs1, endVertex: cs2)
+simpleGraph.addEdge(startVertex: cs1, endVertex: cs3)
+simpleGraph.hasCycle(startIndex: cs1)
+
