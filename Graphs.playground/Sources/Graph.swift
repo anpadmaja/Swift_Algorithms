@@ -49,21 +49,27 @@ public class EdgeList<Element>: Equatable where Element:Hashable {
   }
 }
 
-//public protocol BaseGraphProperties {
-//  associatedtype Item
-//  var vertices: [Item] {get}
-//  var edges: [Edge] {get}
-//  var numberOfVertices: Int {get}
-//  var numberOfEdges: Int {get}
-//  func addVertex(data: String) -> Vertex
-//  func getVertex(data: String) -> Vertex
-//  func addEdge(startVertex: Vertex, endVertex: Vertex)
-//  func addEdge(startVertex: Vertex, endVertex: Vertex, weight: Double)
-//  func hasEdge(startVertex: Vertex, endVertex: Vertex) -> Bool
-//  func levelOrderTraversal(startVertex: Vertex) -> [Vertex]
-//}
+public protocol BaseGraphProperties {
+  associatedtype V
+  associatedtype E
+  associatedtype Element
+  var vertices: [V] {get}
+  var edges: [E] {get}
+  var numberOfVertices: Int {get}
+  var numberOfEdges: Int {get}
+  func addVertex(data: Element) -> V
+  func getVertex(data: Element) -> V
+  func addEdge(startVertex: V, endVertex: V)
+  func addEdge(startVertex: V, endVertex: V, weight: Double)
+  func hasEdge(startVertex: V, endVertex: V) -> Bool
+  func levelOrderTraversal(startVertex: V) -> [V]
+}
 
-public class AdjacencyListGraph<Element>: Equatable where Element:Hashable {
+public class AdjacencyListGraph<Element>: BaseGraphProperties, Equatable where Element:Hashable {
+  
+  public typealias V = Vertex<Element>
+  public typealias E = Edge<Element>
+  public typealias Element = String
   
   public static func ==(lhs: AdjacencyListGraph,  rhs: AdjacencyListGraph) -> Bool {
     return true
@@ -71,8 +77,8 @@ public class AdjacencyListGraph<Element>: Equatable where Element:Hashable {
   
   public var adjacencyList: [EdgeList] = [EdgeList<Element>]()
   
-  public var vertices: [Vertex<Element>] {
-    var v = [Vertex<Element>]()
+  public var vertices: [V] {
+    var v = [V]()
     for edgeList in adjacencyList {
       v.append(edgeList.vertex)
     }
@@ -83,8 +89,8 @@ public class AdjacencyListGraph<Element>: Equatable where Element:Hashable {
     return vertices.count
   }
   
-  public var edges: [Edge<Element>] {
-    var e = [Edge<Element>]()
+  public var edges: [E] {
+    var e = [E]()
     for list in adjacencyList {
       guard let edgesCount = list.edges else { continue }
       for edge in edgesCount {
@@ -100,8 +106,8 @@ public class AdjacencyListGraph<Element>: Equatable where Element:Hashable {
   
   public init() {}
   
-  public func addVertex(data: Element) -> Vertex<Element> {
-    let existingVertex: [Vertex<Element>] = vertices.filter { vertex in
+  public func addVertex(data: Element) -> V {
+    let existingVertex: [V] = vertices.filter { vertex in
       return vertex.data == data
     }
     guard existingVertex.count == 0 else {
@@ -113,14 +119,14 @@ public class AdjacencyListGraph<Element>: Equatable where Element:Hashable {
     return v
   }
   
-  public func getVertex(data: Element) -> Vertex<Element> {
+  public func getVertex(data: Element) -> V {
     let existingVertex = vertices.filter { vertex in
       return vertex.data == data
     }
     return existingVertex.last!
   }
   
-  public func addEdge(startVertex: Vertex<Element>, endVertex: Vertex<Element>) {
+  public func addEdge(startVertex: V, endVertex: V) {
     
     let edgeToAdd = Edge(startVertex:startVertex, endVertex:endVertex) // edge to add between start and end vertices
     let edgelist = adjacencyList[startVertex.index]
@@ -132,7 +138,7 @@ public class AdjacencyListGraph<Element>: Equatable where Element:Hashable {
     }
   }
   
-  public func addEdge(startVertex: Vertex<Element>, endVertex: Vertex<Element>, weight: Double){
+  public func addEdge(startVertex: V, endVertex: V, weight: Double){
     let edgeToAdd = Edge(startVertex:startVertex, endVertex:endVertex, weight: weight) // edge to add between start and end vertices
     let edgelist = adjacencyList[startVertex.index]
     
@@ -143,7 +149,7 @@ public class AdjacencyListGraph<Element>: Equatable where Element:Hashable {
     }
   }
   
-  public func degreeOfVertex(vertex: Vertex<Element>) -> Int {
+  public func degreeOfVertex(vertex: V) -> Int {
     let edgeList = adjacencyList[vertex.index]
     if let numberOfEgdes = edgeList.edges {
       return numberOfEgdes.count
@@ -152,7 +158,7 @@ public class AdjacencyListGraph<Element>: Equatable where Element:Hashable {
     }
   }
   
-  public func hasEdge(startVertex: Vertex<Element>, endVertex: Vertex<Element>) -> Bool {
+  public func hasEdge(startVertex: V, endVertex: V) -> Bool {
     let edgeList = adjacencyList[startVertex.index]
     if let edges = edgeList.edges {
       for edge in edges {
@@ -164,8 +170,8 @@ public class AdjacencyListGraph<Element>: Equatable where Element:Hashable {
     return false
   }
   
-  public func getNeighbors(startVertex: Vertex<Element>) -> [Vertex<Element>]? {
-    var neighbors: [Vertex<Element>] = [Vertex<Element>]()
+  public func getNeighbors(startVertex: V) -> [V]? {
+    var neighbors: [V] = [V]()
     let edgeList = adjacencyList[startVertex.index]
     if let edges = edgeList.edges {
       for edge in edges {
@@ -177,7 +183,7 @@ public class AdjacencyListGraph<Element>: Equatable where Element:Hashable {
     }
   }
   
-  public func hasCycle(startIndex: Vertex<Element>) -> Bool {
+  public func hasCycle(startIndex: V) -> Bool {
     let unvisitedNeighborsStack = Stack<Element>()
     let visitedNeighborsQueue = Queue<Element>()
 
@@ -201,7 +207,7 @@ public class AdjacencyListGraph<Element>: Equatable where Element:Hashable {
     return false
   }
   
-  public func levelOrderTraversal(startVertex: Vertex<Element>) -> [Vertex<Element>] {
+  public func levelOrderTraversal(startVertex: V) -> [V] {
     let unvisitedNeighborsQueue = Queue<Element>()
     let visitedVerticesQueue = Queue<Element>()
     
@@ -211,7 +217,7 @@ public class AdjacencyListGraph<Element>: Equatable where Element:Hashable {
       if !visitedVerticesQueue.list.contains(v) {
         visitedVerticesQueue.enqueue(value: v)
       }
-      if let neighbors: [Vertex<Element>] = getNeighbors(startVertex: v) {
+      if let neighbors: [V] = getNeighbors(startVertex: v) {
         for n in neighbors {
           if !visitedVerticesQueue.list.contains(n) {
             unvisitedNeighborsQueue.enqueue(value: n)
@@ -222,7 +228,7 @@ public class AdjacencyListGraph<Element>: Equatable where Element:Hashable {
     return visitedVerticesQueue.list
   }
   
-  public func depthFirstSearch(startIndex: Vertex<Element>) -> [Vertex<Element>] {
+  public func depthFirstSearch(startIndex: V) -> [V] {
     let visitedNeighQueue = Queue<Element>()
     let unvisitedNeighStack = Stack<Element>()
     
@@ -243,8 +249,8 @@ public class AdjacencyListGraph<Element>: Equatable where Element:Hashable {
     return visitedNeighQueue.list
   }
   
-  public func topologicalSort() -> [Vertex<Element>] {
-    var returnList = [Vertex<Element>]()
+  public func topologicalSort() -> [V] {
+    var returnList = [V]()
     let visitedNeighborsStack = Stack<Element>()
     let unvisitedNeighborsStack = Stack<Element>()
     
