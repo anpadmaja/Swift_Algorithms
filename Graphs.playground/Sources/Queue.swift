@@ -8,22 +8,22 @@
 //q.isEmpty
 //
 
-public class Queue: Equatable {
-  public private(set) var list: [Vertex]
+public class Queue<Element>: Equatable where Element: Hashable{
+  public private(set) var list: [Vertex<Element>]
   
   public init() {
-    list = [Vertex]()
+    list = [Vertex<Element>]()
   }
   
-  public func enqueue(value: Vertex) {
+  public func enqueue(value: Vertex<Element>) {
     list.append(value)
   }
   
-  public func dequeue() -> Vertex {
+  public func dequeue() -> Vertex<Element> {
     return list.removeFirst()
   }
   
-  public func contains(value: Vertex) -> Bool {
+  public func contains(value: Vertex<Element>) -> Bool {
     return list.contains(value)
   }
   
@@ -41,7 +41,7 @@ public class Queue: Equatable {
     return list.isEmpty
   }
   
-  public static func ==(lhs: Queue, rhs: Queue) -> Bool {
+  public static func ==(lhs: Queue<Element>, rhs: Queue<Element>) -> Bool {
     return lhs.list == rhs.list
   }
   

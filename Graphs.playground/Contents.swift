@@ -1,6 +1,6 @@
 //: Playground - noun: a place where people can play
 
-let graph = AdjacencyListGraph()
+let graph = AdjacencyListGraph<String>()
 
 // BFS and DFS graphs
 let a = graph.addVertex(data: "A")
@@ -43,7 +43,7 @@ graph.depthFirstSearch(startIndex: a)
 graph.hasCycle(startIndex: a)
 
 // topological sort graph
-let topoGraph = AdjacencyListGraph()
+let topoGraph = AdjacencyListGraph<String>()
 
 let c1 = topoGraph.addVertex(data: "CS1")
 let c2 = topoGraph.addVertex(data: "CS2")
@@ -69,7 +69,7 @@ topoGraph.addEdge(startVertex: c9, endVertex: c10)
 topoGraph.addEdge(startVertex: c5, endVertex: c10)
 topoGraph.topologicalSort()
 
-let simpleGraph = AdjacencyListGraph()
+let simpleGraph = AdjacencyListGraph<String>()
 let cs1 = simpleGraph.addVertex(data: "A")
 let cs2 = simpleGraph.addVertex(data: "B")
 let cs3 = simpleGraph.addVertex(data: "C")

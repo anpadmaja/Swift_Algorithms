@@ -16,25 +16,25 @@ import Foundation
 
 // END Of testing Queue impl
 
-public class Stack: Equatable {
-  private(set) var list: [Vertex]
+public class Stack<Element>: Equatable where Element: Hashable {
+  private(set) var list: [Vertex<Element>]
   public var isEmpty: Bool {
     return list.isEmpty
   }
   
   public init() {
-    list = [Vertex]()
+    list = [Vertex<Element>]()
   }
   
-  public func push(value: Vertex) {
+  public func push(value: Vertex<Element>) {
     list.append(value)
   }
   
-  public func pop() -> Vertex {
+  public func pop() -> Vertex<Element> {
     return list.removeLast()
   }
   
-  public func peek() -> Vertex {
+  public func peek() -> Vertex<Element> {
     return list[count-1]
   }
   
@@ -46,7 +46,7 @@ public class Stack: Equatable {
     return list.count
   }
   
-  public func contains(value: Vertex) -> Bool {
+  public func contains(value: Vertex<Element>) -> Bool {
     return list.contains(value)
   }
   
@@ -56,7 +56,7 @@ public class Stack: Equatable {
     }
   }
   
-  public static func ==(lhs: Stack, rhs: Stack) -> Bool {
+  public static func ==(lhs: Stack<Element>, rhs: Stack<Element>) -> Bool {
     return lhs.list == rhs.list
   }
 }
