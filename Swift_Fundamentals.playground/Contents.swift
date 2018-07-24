@@ -1,7 +1,5 @@
 //: Playground - noun: a place where people can play
 
-import UIKit
-
 func isHappy(_ n: Int) -> Bool {
   var visitedNumbers = [Int]()
   var currentInt = n
