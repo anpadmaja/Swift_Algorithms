@@ -3,7 +3,7 @@
 func isHappy(_ n: Int) -> Bool {
   var visitedNumbers = [Int]()
   var currentInt = n
-  
+
   while !isPowerOfTen(n: currentInt) {
     let currentNumber = String(currentInt)
     var currentNumberList = currentNumber.map({Int(String($0))})
@@ -58,12 +58,12 @@ public struct Vertex: Equatable {
   public var data: String
   public var index: Int
   public var isVisited: Bool = false
-  
+
   public init(data: String, index: Int) {
     self.data = data
     self.index = index
   }
-  
+
   public static func ==(lhs: Vertex, rhs: Vertex) -> Bool {
     return lhs.data == rhs.data && lhs.index == rhs.index
   }
@@ -78,7 +78,7 @@ vertexList.contains(c)
 
 enum Directions: String {
   case east,west,north,south
-  
+
   static var list: [Directions] {
     return [Directions.east, Directions.west, Directions.north, Directions.south]
   }
@@ -89,7 +89,7 @@ dir
 
 enum LightBulbStates {
   case On, Off
-  
+
   mutating func toggle() -> LightBulbStates {
     switch self {
     case .Off:
@@ -118,7 +118,7 @@ enum Planets: Int {
   case Uranus
   case Neptune
   case Pluto
-  
+
   mutating func nextPlanet() {
     switch self {
     case .Mercury :
@@ -151,3 +151,146 @@ merc.nextPlanet()
 if var jupiter = Planets(rawValue: 5) {
   jupiter.nextPlanet()
 }
+
+public class ListNode {
+  public var val: Int
+  public var next: ListNode?
+  public init(_ val: Int) {
+    self.val = val
+    self.next = nil
+  }
+}
+
+class Queue<Element> : Equatable where Element: Hashable {
+  private var list: [Element]
+  init() {
+    list = [Element]()
+  }
+  func enqueue(_ value: Element) {
+    list.append(value)
+  }
+  func dequeue() -> Element {
+    return list.removeFirst()
+  }
+  func peek() -> Element? {
+    return list.first
+  }
+  
+  public static func ==(lhs: Queue, rhs: Queue) -> Bool {
+    return lhs.list == rhs.list
+  }
+  
+  public func isEmpty() -> Bool {
+    return list.isEmpty
+  }
+}
+
+func addTwoNumbers(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
+  if l1 == nil && l2 == nil { return nil }
+  
+  var carry = 0
+  var val1 = 0
+  var val2 = 0
+  let queue = Queue<Int>()
+  var currentl1 = l1
+  var currentl2 = l2
+  
+  let head: ListNode?
+  var current: ListNode?
+  head = current
+  
+  while (currentl1 != nil || currentl2 != nil) {
+    if let list1 = currentl1 {
+      val1 = list1.val
+    } else { val1 = 0 }
+    
+    if let list2 = currentl2 {
+      val2 = list2.val
+    } else { val2 = 0 }
+    
+    let sum = val1+val2+carry
+    if sum >= 10 {
+      let result = calculateCarryAndModulo(sum)
+      carry = result.carry
+      queue.enqueue(result.modulo)
+    } else {
+      carry = 0
+      queue.enqueue(sum)
+    }
+    currentl1 = currentl1?.next
+    currentl2 = currentl2?.next
+  }
+  
+  while !queue.isEmpty() {
+    let val = queue.dequeue()
+    print("value in queue: \(val)")
+    let node = ListNode(val)
+    if current != nil {
+      current?.next = node
+      current = current?.next
+    } else {
+      current = node
+    }
+  }
+  return head
+}
+
+func calculateCarryAndModulo(_ num: Int) -> (carry: Int, modulo: Int) {
+  let input = num
+  guard input != 0 else { return (carry: 0, modulo: 0) }
+  if input < 9 {
+    return (carry: 0, modulo: input)
+  } else {
+    let modulo = input%10
+    let carry = input/10
+    return (carry: carry, modulo: modulo)
+  }
+}
+
+let one = ListNode(1)
+let two = ListNode(2)
+let three = ListNode(3)
+one.next = two
+two.next = three
+
+let l1 = ListNode(2)
+l1.next = ListNode(1)
+l1.next?.val
+
+let l2 = ListNode(4)
+l2.next = ListNode(3)
+l2.next?.val
+
+func deleteDuplicates(_ head: ListNode?) -> ListNode? {
+  
+  var dict = [Int: Int]()
+  var returnNode: ListNode?
+  var currentReturnNode: ListNode?
+  var current = head
+  
+  while (current != nil) {
+    if let value = current?.val {
+      dict[value] = (dict[value] ?? 0 )+1
+    }
+    current = current?.next
+  }
+  current = head
+  
+  while(current != nil) {
+    if let value = current?.val {
+      if dict[value] == 1 {
+        if returnNode == nil {
+          returnNode = ListNode(value)
+          currentReturnNode = returnNode
+        } else {
+          currentReturnNode?.next = ListNode(value)
+          currentReturnNode = currentReturnNode?.next
+        }
+      }
+    }
+    current = current?.next
+  }
+  return returnNode
+}
+
+deleteDuplicates(one)
