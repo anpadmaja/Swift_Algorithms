@@ -69,7 +69,6 @@ public class AdjacencyListGraph<Element>: BaseGraphProperties, Equatable where E
   
   public typealias V = Vertex<Element>
   public typealias E = Edge<Element>
-  public typealias Element = String
   
   public static func ==(lhs: AdjacencyListGraph,  rhs: AdjacencyListGraph) -> Bool {
     return true
@@ -183,7 +182,19 @@ public class AdjacencyListGraph<Element>: BaseGraphProperties, Equatable where E
     }
   }
   
-  public func hasCycle(startIndex: V) -> Bool {
+  public func hasCycle() -> Bool {
+    let allVerticesStack = Stack<Element>()
+    for vertex in self.vertices {
+      allVerticesStack.push(value: vertex)
+    }
+    while !allVerticesStack.isEmpty {
+      let startVertex = allVerticesStack.pop()
+      guard !hasCycle_Int(startIndex: startVertex) else { return true }
+    }
+    return false
+  }
+  
+  public func hasCycle_Int(startIndex: V) -> Bool {
     let unvisitedNeighborsStack = Stack<Element>()
     let visitedNeighborsQueue = Queue<Element>()
 
@@ -228,7 +239,25 @@ public class AdjacencyListGraph<Element>: BaseGraphProperties, Equatable where E
     return visitedVerticesQueue.list
   }
   
-  public func depthFirstSearch(startIndex: V) -> [V] {
+  public func depthFirstTraversalOrder() -> [V] {
+    let allVerticesStack = Stack<Element>()
+    var returnList = [V]()
+    for vertex in self.vertices {
+      allVerticesStack.push(value: vertex)
+    }
+    while !allVerticesStack.isEmpty {
+      let startVertex = allVerticesStack.pop()
+      let tempList = depthFirstTraversal_Int(startIndex: startVertex)
+      for temp in tempList {
+        if !returnList.contains(temp) {
+          returnList.append(temp)
+        }
+      }
+    }
+    return returnList
+  }
+  
+  public func depthFirstTraversal_Int(startIndex: V) -> [V] {
     let visitedNeighQueue = Queue<Element>()
     let unvisitedNeighStack = Stack<Element>()
     

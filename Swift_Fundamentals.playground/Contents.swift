@@ -24,14 +24,35 @@ func isHappy(_ n: Int) -> Bool {
 
 func isPowerOfTen(n: Int) -> Bool {
   var input = n
-  while input > 9 && input%10 == 0{
-    input /= 10
+  guard input > 0 else { return false }
+  while input > 9 {
+    if input%10 == 0 {
+      input /= 10
+    } else {
+      return false
+    }
   }
   return input==1
 }
 
+func getModuloAndCarryFor2Digit(num: Int) -> (modulo: Int, carry: Int) {
+  let input = num
+  guard input > 0 else { return (0,0)}
+  if input < 10 {
+    return (input,0)
+  }
+  else {
+    let modulo = input%10
+    let carry = input/10
+    return (modulo, carry)
+  }
+}
+
+getModuloAndCarryFor2Digit(num: 9)
+getModuloAndCarryFor2Digit(num: 99)
+
 isHappy(19)
-isPowerOfTen(n: 1)
+isPowerOfTen(n: 90)
 
 public struct Vertex: Equatable {
   public var data: String
